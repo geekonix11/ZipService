@@ -11,6 +11,8 @@ namespace ZipService.Profile{
         {
             CreateMap<User, UserDto>();
             CreateMap<UserCreateDto, User>();
+            CreateMap<AccountCreateDTO, Account>();
+            CreateMap<Account, AccountReadDto>();
         }
     }
 }

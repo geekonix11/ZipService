@@ -8,6 +8,10 @@ namespace ZipService.Data{
         IEnumerable<User> GetAllUsers();
         User GetUserById(int id);
         void CreateUser(User plat);
+
+        void CreateAccount(Account acct);
+        Account GetAccountById(int id);
+        IEnumerable<Account> GetAllAccounts();
     }
 
 }

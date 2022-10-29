@@ -10,6 +10,6 @@ namespace ZipService.Dto
         public int Salary { get; set; }
         
         public int Expense { get; set; }
-        public Account Account { get; set; }
+        //public Account Account { get; set; }
     }
 }
