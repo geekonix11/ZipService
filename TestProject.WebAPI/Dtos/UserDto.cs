@@ -1,7 +1,7 @@
 namespace ZipService.Dto{
     public class UserDto{
         
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
         public string Name { get; set; }
        
@@ -10,6 +10,7 @@ namespace ZipService.Dto{
         public int Salary { get; set; }
         
         public int Expense { get; set; }
+       // public Account Account { get; set; }
     }
 
 }

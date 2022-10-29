@@ -16,18 +16,30 @@ namespace TestProject.WebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
 
+        private readonly IWebHostEnvironment _env;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(opt => 
-            opt.UseInMemoryDatabase("InMem"));
+            // if(_env.IsProduction()){
+                Console.WriteLine("Is Production 123");
+                 services.AddDbContext<AppDbContext>(opt => 
+            opt.UseSqlServer(Configuration.GetConnectionString("ZipConnection")));
+            // }
+            // else{
+            //     Console.WriteLine("Is development2");
+            //      services.AddDbContext<AppDbContext>(opt => 
+            // opt.UseInMemoryDatabase("InMem"));
+            // }
+            
 
             services.AddScoped<IUserRepo, UserRepo>();
             
@@ -54,7 +66,7 @@ namespace TestProject.WebAPI
             {
                 endpoints.MapControllers();
             });
-            PrepDb.PrepPopulation(app);
+            //PrepDb.PrepPopulation(app, _env.IsProduction());
         }
     }
 }

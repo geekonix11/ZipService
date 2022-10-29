@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -48,12 +49,18 @@ namespace ZipService.Controllers{
         [HttpPost]
         public ActionResult<UserDto> CreateUser(UserCreateDto user)
         {
-             var userModel = _mapper.Map<User>(user);
+            try{
+                var userModel = _mapper.Map<User>(user);
              _repository.CreateUser(userModel);
              _repository.SaveChanges();
 
              var userReadDto = _mapper.Map<UserDto>(userModel);
-             return CreatedAtRoute(nameof(GetUserById), new {Id = userReadDto.Id}, userReadDto); 
+             return CreatedAtRoute(nameof(GetUserById), new {Id = userReadDto.UserId}, userReadDto); 
+            }
+            catch(Exception ex){
+                return BadRequest(ex.InnerException.Message);
+            }
+             
         }
     }
 

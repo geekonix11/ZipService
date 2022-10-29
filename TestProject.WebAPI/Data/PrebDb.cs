@@ -1,22 +1,28 @@
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ZipService.Models;
 
 namespace ZipService.Data{
     public static class PrepDb{
-        public static void PrepPopulation(IApplicationBuilder app){
+        public static void PrepPopulation(IApplicationBuilder app, bool isProd){
 
             using(var serviceScope = app.ApplicationServices.CreateScope() ){
-                SeedData(serviceScope.ServiceProvider.GetService<AppDbContext>());
+                SeedData(serviceScope.ServiceProvider.GetService<AppDbContext>(), isProd);
             }
 
 
         }
 
-        private static void SeedData(AppDbContext context){
-            if(!context.Users.Any()){
+        private static void SeedData(AppDbContext context, bool isProd){
+            if(isProd){
+                context.Database.Migrate();
+            }
+            else{
+
+                if(!context.Users.Any()){
                  Console.WriteLine("...seeding data");
                  context.Users.AddRange(
                     new User() {Name="a", Email= "a@b.com", Expense=100, Salary =5000},
@@ -31,6 +37,8 @@ namespace ZipService.Data{
                 Console.WriteLine("...We already have data");
                 Console.WriteLine(context.Users.FirstOrDefault().Email);
             }
+            }
+            
 
         }
           
