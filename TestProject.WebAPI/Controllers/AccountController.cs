@@ -48,6 +48,12 @@ namespace ZipService.Controllers
         public ActionResult<Account> CreateAccount(AccountCreateDTO acct)
         {
             try{
+                var user = _repository.GetUserById(acct.UserId);
+
+                if((user.Salary - user.Expense) < 1000){
+                    return BadRequest("Salary - Expense should be more than 1000");
+                }
+
                 var accountModel = _mapper.Map<Account>(acct);
              _repository.CreateAccount(accountModel);
              _repository.SaveChanges();
