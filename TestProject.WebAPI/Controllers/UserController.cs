@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using ZipService.Data;
 using ZipService.Dto;
 using ZipService.Models;
+using ZipService.Business;
 
 namespace ZipService.Controllers{
 
@@ -14,21 +15,25 @@ namespace ZipService.Controllers{
     {
         private readonly IUserRepo _repository;
         private readonly IMapper _mapper;
+        private readonly UserBusiness _business;
 
         
         public UserController(IUserRepo repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
-            
+            _business = new UserBusiness(_repository, _mapper);
         }
         
         [HttpGet]
         public ActionResult<IEnumerable<UserDto>> GetUsers()
         {
 
-            var users = _repository.GetAllUsers();
-            return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
+            // var users = _repository.GetAllUsers();
+            // return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
+            return Ok(_business.GetUsers());
+            
+
         } 
 
          [HttpGet("{id}", Name = "GetUserById")]

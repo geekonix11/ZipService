@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ZipService.Business;
 using ZipService.Data;
 using ZipService.Dto;
 using ZipService.Models;
@@ -13,11 +14,13 @@ namespace ZipService.Controllers
     {
         private readonly IUserRepo _repository;
         private readonly IMapper _mapper;
+        private readonly AccountBusiness _business;
 
         public AccountController(IUserRepo repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
+            _business = new AccountBusiness(_repository, _mapper);
             
         }
 
@@ -48,20 +51,28 @@ namespace ZipService.Controllers
         public ActionResult<Account> CreateAccount(AccountCreateDTO acct)
         {
             try{
-                var user = _repository.GetUserById(acct.UserId);
-
-                if((user.Salary - user.Expense) < 1000){
-                    return BadRequest("Salary - Expense should be more than 1000");
+                var account = _business.CreateAccount(acct);
+                if(account.Contains("Success")){
+                    return Ok();    
                 }
+                else{
+                    return BadRequest(account);
+                }
+                
+            //     var user = _business.GetUserById(acct.UserId);
 
-                var accountModel = _mapper.Map<Account>(acct);
-             _repository.CreateAccount(accountModel);
-             _repository.SaveChanges();
+            //     if((user.Salary - user.Expense) < 1000){
+            //         return BadRequest("Salary - Expense should be more than 1000");
+            //     }
 
-             var acctReadDto = _mapper.Map<AccountReadDto>(accountModel);
+            //     var accountModel = _mapper.Map<Account>(acct);
+            //  _repository.CreateAccount(accountModel);
+            //  _repository.SaveChanges();
+
+            //  var acctReadDto = _mapper.Map<AccountReadDto>(accountModel);
             
-             //return CreatedAtRoute("nameof(GetAccountById)", new {Id = acctReadDto.Id}, acctReadDto); 
-            return Ok();
+            //  //return CreatedAtRoute("nameof(GetAccountById)", new {Id = acctReadDto.Id}, acctReadDto); 
+            // return Ok();
             }
             catch(Exception ex){
                 return BadRequest(ex.InnerException.Message);
