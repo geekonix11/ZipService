@@ -19,6 +19,7 @@ namespace ZipService.Data{
         private static void SeedData(AppDbContext context, bool isProd){
             if(isProd){
                 context.Database.Migrate();
+                Console.WriteLine("...migrating");
             }
             else{
 

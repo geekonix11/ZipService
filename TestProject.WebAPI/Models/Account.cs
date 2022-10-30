@@ -8,6 +8,7 @@ namespace ZipService.Models{
         public string AccountNo { get; set; }
 
         public string Type { get; set; }
+        [Range(1,1000)]
         public int Balance { get; set; }
 
         [ForeignKey("User")]

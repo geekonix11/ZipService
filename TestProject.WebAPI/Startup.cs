@@ -66,7 +66,7 @@ namespace TestProject.WebAPI
             {
                 endpoints.MapControllers();
             });
-            //PrepDb.PrepPopulation(app, _env.IsProduction());
+            PrepDb.PrepPopulation(app, _env.IsProduction());
         }
     }
 }
